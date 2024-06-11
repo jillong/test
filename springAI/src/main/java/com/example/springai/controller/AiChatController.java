@@ -72,7 +72,7 @@ public class AiChatController {
      * @param voice 机器人声音
      * @return 生成的对话
      */
-    @GetMapping("/ai/prompt")
+    @GetMapping("/prompt")
     public String prompt(@RequestParam(value = "name") String name,
                          @RequestParam(value = "voice") String voice) {
         String userText = """
@@ -106,7 +106,7 @@ public class AiChatController {
      * @param message 用户输入的消息
      * @return 生成的对话
      */
-    @GetMapping("/ai/generate/function/call")
+    @GetMapping("/generate/function/call")
     public String functionCall(@RequestParam(value = "message", defaultValue = "上海天气如何?") String message) {
 
         String systemPrompt = "{prompt}";
@@ -133,7 +133,7 @@ public class AiChatController {
      * @param actor 演员名字
      * @return 生成的电影作品年表
      */
-    @GetMapping("/ai/parser")
+    @GetMapping("/parser")
     public String Response(@RequestParam(value = "actor") String actor) {
         BeanOutputParser<ActorsFilms> outputParser = new BeanOutputParser<>(ActorsFilms.class);
 

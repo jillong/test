@@ -22,7 +22,7 @@ import java.util.List;
 
 @Log4j2
 @RestController
-@RequestMapping("/ai/vector")
+@RequestMapping("/ai/vectorStore")
 public class AiVectorController {
 
     @Resource
@@ -50,13 +50,13 @@ public class AiVectorController {
      * @param content 文本内容
      * @return 添加结果
      */
-    @GetMapping("/vectorStore/add")
+    @GetMapping("/add")
     public String vectorStoreAdd(@RequestParam(value = "content") String content) {
         List<Document> documentList = new ArrayList<>();
         Document document = new Document(content);
         documentList.add(document);
-        vectorStore.add(documentList);
-        return "Response.ok()";
+        this.vectorStore.add(documentList);
+        return JacksonUtil.ToJson(document);
     }
 
     /**
@@ -65,9 +65,9 @@ public class AiVectorController {
      * @param query 查询内容
      * @return 搜索结果
      */
-    @GetMapping("/vectorStore/search")
+    @GetMapping("/search")
     public String vectorStoreSearch(@RequestParam(value = "query") String query) {
-        List<Document> documents = vectorStore.similaritySearch(query);
+        List<Document> documents = this.vectorStore.similaritySearch(query);
         return JacksonUtil.ToJson(documents);
     }
 

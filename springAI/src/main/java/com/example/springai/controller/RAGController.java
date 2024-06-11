@@ -16,7 +16,6 @@ import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.PgVectorStore;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,7 +72,7 @@ public class RAGController {
      * @return
      */
 
-    @GetMapping("/ai/agent")
+    @GetMapping("/agent")
     public String rag(@RequestParam(value = "query") String query) {
         // 首先检索挂载信息
         List<Document> documents = vectorStore.similaritySearch(query);
