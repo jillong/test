@@ -2,12 +2,7 @@ package org.example.utils;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.example.entity.MonitorHeartbeatProperties;
-import org.example.entity.MonitorInstanceProperties;
-import org.example.entity.MonitorJvmInfoProperties;
 import org.example.entity.MonitorProperties;
-import org.example.entity.MonitorServerInfoProperties;
-import org.example.entity.MonitoreServerProperties;
 import org.example.exception.IllegalPropertiesException;
 import org.example.exception.NotFindPropertyException;
 
@@ -17,7 +12,13 @@ import java.util.Properties;
 
 public class AnalysisPropertiesUtil {
 
+    private static final MonitorProperties monitorProperties = new MonitorProperties();
+
     public static String[] instanceEndpoints = {"client", "agent", "server", "ui"};
+
+    public static MonitorProperties getMonitorProperties() {
+        return monitorProperties;
+    }
 
     public static Properties getProperties(String propertiesUrl) throws IOException {
 
@@ -35,22 +36,16 @@ public class AnalysisPropertiesUtil {
 
     public static MonitorProperties cleanProperties(Properties properties) {
 
-        MonitorProperties monitorProperties = new MonitorProperties();
-        MonitoreServerProperties monitoreServerProperties = cleanServerProperties(properties);
-        MonitorInstanceProperties monitorInstanceProperties = cleanInstanceProperties(properties);
-        MonitorHeartbeatProperties monitorHeartbeatProperties = cleanHeartbeatProperties(properties);
-        MonitorServerInfoProperties monitorServerInfoProperties = cleanServerInfoProperties(properties);
-        MonitorJvmInfoProperties monitorJvmInfoProperties = cleanJvmInfoProperties(properties);
+        cleanServerProperties(properties);
+        cleanInstanceProperties(properties);
+        cleanHeartbeatProperties(properties);
+        cleanServerInfoProperties(properties);
+        cleanJvmInfoProperties(properties);
 
-        monitorProperties.setMonitoreServerProperties(monitoreServerProperties);
-        monitorProperties.setMonitorInstanceProperties(monitorInstanceProperties);
-        monitorProperties.setMonitorHeartbeatProperties(monitorHeartbeatProperties);
-        monitorProperties.setMonitorServerInfoProperties(monitorServerInfoProperties);
-        monitorProperties.setMonitorJvmInfoProperties(monitorJvmInfoProperties);
         return monitorProperties;
     }
 
-    private static MonitorJvmInfoProperties cleanJvmInfoProperties(Properties properties) {
+    private static void cleanJvmInfoProperties(Properties properties) {
 
         String jvmInfoEnableString = StringUtils.trim(properties.getProperty("monitoring.jvm-info.enable"));
         boolean jvmInfoEnable =
@@ -64,14 +59,12 @@ public class AnalysisPropertiesUtil {
             jvmInfoRate = Integer.parseInt(jvmInfoRateString);
         }
 
-        MonitorJvmInfoProperties monitorJvmInfoProperties = new MonitorJvmInfoProperties();
-        monitorJvmInfoProperties.setJvmInfoEnable(jvmInfoEnable);
-        monitorJvmInfoProperties.setJvmInfoRate(jvmInfoRate);
-        return monitorJvmInfoProperties;
+        monitorProperties.setJvmInfoEnable(jvmInfoEnable);
+        monitorProperties.setJvmInfoRate(jvmInfoRate);
 
     }
 
-    private static MonitorServerInfoProperties cleanServerInfoProperties(Properties properties) {
+    private static void cleanServerInfoProperties(Properties properties) {
 
         String serverInfoEnableString = StringUtils.trim(properties.getProperty("monitoring.server-info.enable"));
         boolean serverInfoEnable =
@@ -95,16 +88,14 @@ public class AnalysisPropertiesUtil {
         boolean userSigarEnable =
                 StringUtils.isNotBlank(userSigarEnableString) && Boolean.parseBoolean(userSigarEnableString);
 
-        MonitorServerInfoProperties monitorServerInfoProperties = new MonitorServerInfoProperties();
-        monitorServerInfoProperties.setServerInfoRate(serverInfoRate);
-        monitorServerInfoProperties.setServerInfoIp(serverInfoIp);
-        monitorServerInfoProperties.setServerInfoEnable(serverInfoEnable);
-        monitorServerInfoProperties.setUserSigarEnable(userSigarEnable);
-        return monitorServerInfoProperties;
+        monitorProperties.setServerInfoRate(serverInfoRate);
+        monitorProperties.setServerInfoIp(serverInfoIp);
+        monitorProperties.setServerInfoEnable(serverInfoEnable);
+        monitorProperties.setUserSigarEnable(userSigarEnable);
 
     }
 
-    private static MonitorHeartbeatProperties cleanHeartbeatProperties(Properties properties) {
+    private static void cleanHeartbeatProperties(Properties properties) {
 
         int heartbeatRate;
         String heartbeatRateString = StringUtils.trim(properties.getProperty("monitoring.heartbeat.rate"));
@@ -115,13 +106,11 @@ public class AnalysisPropertiesUtil {
             heartbeatRate = Integer.parseInt(heartbeatRateString);
         }
 
-        MonitorHeartbeatProperties monitorHeartbeatProperties = new MonitorHeartbeatProperties();
-        monitorHeartbeatProperties.setHeartbeat(heartbeatRate);
-        return monitorHeartbeatProperties;
+        monitorProperties.setHeartbeat(heartbeatRate);
 
     }
 
-    private static MonitorInstanceProperties cleanInstanceProperties(Properties properties) {
+    private static void cleanInstanceProperties(Properties properties) {
         String instanceOrderString = StringUtils.trim(properties.getProperty("monitoring.own.instance.order"));
         int instanceOrder = instanceOrderString == null ? 1 : Integer.parseInt(instanceOrderString);
 
@@ -146,17 +135,14 @@ public class AnalysisPropertiesUtil {
             instanceLanguage = "java";
         }
 
-        MonitorInstanceProperties monitorInstanceProperties = new MonitorInstanceProperties();
-        monitorInstanceProperties.setInstanceDesc(instanceDesc);
-        monitorInstanceProperties.setInstanceLanguage(instanceLanguage);
-        monitorInstanceProperties.setInstanceEndpoint(instanceEndpoint);
-        monitorInstanceProperties.setInstanceName(instanceName);
-        monitorInstanceProperties.setInstanceOrder(instanceOrder);
-
-        return monitorInstanceProperties;
+        monitorProperties.setInstanceDesc(instanceDesc);
+        monitorProperties.setInstanceLanguage(instanceLanguage);
+        monitorProperties.setInstanceEndpoint(instanceEndpoint);
+        monitorProperties.setInstanceName(instanceName);
+        monitorProperties.setInstanceOrder(instanceOrder);
     }
 
-    private static MonitoreServerProperties cleanServerProperties(Properties properties) {
+    private static void cleanServerProperties(Properties properties) {
 
         String serverUrl = properties.getProperty("monitoring.server.url");
         if (StringUtils.isBlank(serverUrl)) {
@@ -169,12 +155,10 @@ public class AnalysisPropertiesUtil {
         int connectionRequestTimeout
                 = disposeTimeout(properties.getProperty("monitoring.server.connection-request-timeout"));
 
-        MonitoreServerProperties monitoreServerProperties = new MonitoreServerProperties();
-        monitoreServerProperties.setServerUrl(serverUrl);
-        monitoreServerProperties.setConnectTimeout(connectTimeout);
-        monitoreServerProperties.setSocketTimeout(socketTimeout);
-        monitoreServerProperties.setConnectionRequestTimeout(connectionRequestTimeout);
-        return monitoreServerProperties;
+        monitorProperties.setServerUrl(serverUrl);
+        monitorProperties.setConnectTimeout(connectTimeout);
+        monitorProperties.setSocketTimeout(socketTimeout);
+        monitorProperties.setConnectionRequestTimeout(connectionRequestTimeout);
 
     }
 
