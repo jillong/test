@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.entity.MonitorProperties;
 import org.example.utils.AnalysisPropertiesUtil;
 
 import java.io.IOException;
