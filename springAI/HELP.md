@@ -16,5 +16,16 @@ spring-ai-bom 0.8.0-SNAPSHOT
   (3) 将pgvector注入spring，spring会自动创建名为vector_store的表，将数据存储在这里
   (4) 数据库连接配置
       spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
-      spring.datasource.username=postgres
-      spring.datasource.password=pgvector
+      spring.datasource.username=xxxxx
+      spring.datasource.password=xxxxx
+
+角色        描述
+----------------------------------------------------------------------------
+user       表示用户的指令，即大模型的使用者对模型的问题、命令或陈述。
+----------------------------------------------------------------------------
+assistant  表示对话助手，也就是大模型的回复，确保了上下文的连贯性。
+----------------------------------------------------------------------------
+system     人设信息，在开始对话之前向人工智能提供指令。
+----------------------------------------------------------------------------
+function   函数信息，用于 Function Calling，使大模型能够在对话回应之外提供实际帮助。
+----------------------------------------------------------------------------

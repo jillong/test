@@ -69,7 +69,7 @@ public class AiChatController {
      * 用提示词模板，生成一个旅游助手
      *
      * @param name  机器人名字
-     * @param voice 机器人声音
+     * @param voice 机器人风格 voice=幽默
      * @return 生成的对话
      */
     @GetMapping("/prompt")
@@ -82,7 +82,7 @@ public class AiChatController {
         Message userMessage = new UserMessage(userText);
 
         String systemText = """
-                你是一个有用的人工智能助手，可以帮助人们查找信息，      
+                你是一个有用的人工智能助手，可以帮助人们查找信息，
                 你的名字是{name}，
                 你应该用你的名字和{voice}的风格回复用户的请求。
                 """;
