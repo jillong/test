@@ -2,6 +2,8 @@ package com.example.springai.controller;
 
 
 import com.example.springai.entity.ActorsFilms;
+import com.example.springai.entity.dto.ChatDTO;
+import com.example.springai.service.ChatService;
 import com.example.springai.utils.JacksonUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
@@ -15,10 +17,7 @@ import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatClient;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.parser.BeanOutputParser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -36,6 +35,9 @@ public class AiChatController {
 
     @Resource
     private OpenAiChatClient chatClient;
+
+    @Resource
+    private ChatService chatService;
 
 
     /**
@@ -62,6 +64,11 @@ public class AiChatController {
 
         Prompt prompt = new Prompt(new UserMessage(message));
         return chatClient.stream(prompt);
+    }
+
+    @PostMapping
+    public String chat(@RequestBody ChatDTO chatDTO) {
+        return chatService.getModelResponse(chatDTO);
     }
 
 

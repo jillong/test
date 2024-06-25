@@ -22,11 +22,10 @@ public class VectorResourcesConfig {
      * @param embeddingClient 向量化客户端
      * @return 向量库
      */
-   /* @Bean
-    @Qualifier("InMemory")
+    @Bean
     public VectorStore createVectorStore(EmbeddingClient embeddingClient) {
         return new SimpleVectorStore(embeddingClient);
-    }*/
+    }
 
     /**
      * 生成向量库Bean，存入PG数据库
@@ -35,9 +34,9 @@ public class VectorResourcesConfig {
      * @param embeddingClient 向量化客户端
      * @return pg向量库
      */
-    @Bean
+    /*@Bean
     public VectorStore createVectorStoreByPG(JdbcTemplate jdbcTemplate, EmbeddingClient embeddingClient) {
         return new PgVectorStore(jdbcTemplate, embeddingClient);
-    }
+    }*/
 
 }
