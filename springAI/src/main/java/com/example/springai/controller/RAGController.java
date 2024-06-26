@@ -16,6 +16,7 @@ import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.PgVectorStore;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,7 @@ import java.util.Set;
 public class RAGController {
 
     @Resource
-    private PgVectorStore vectorStore;
+    private VectorStore vectorStore;
 
     @Resource
     private OpenAiChatClient chatClient;
