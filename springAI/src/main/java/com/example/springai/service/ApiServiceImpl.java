@@ -4,7 +4,7 @@ import com.example.springai.entity.OneChatAiApi;
 import com.example.springai.mapper.ApiMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,15 +33,15 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public void createChatAiApi(OneChatAiApi oneChatAiApi) {
-        ZonedDateTime now = ZonedDateTime.now();
-        oneChatAiApi.setCreateTime(now);
-        oneChatAiApi.setUpdateTime(now);
+        long currMillis = System.currentTimeMillis();
+        oneChatAiApi.setCreateTime(new Date(currMillis));
+        oneChatAiApi.setUpdateTime(new Date(currMillis));
         this.apiMapper.createApi(oneChatAiApi);
     }
 
     @Override
     public void updateChatAiApi(OneChatAiApi oneChatAiApi) {
-        oneChatAiApi.setUpdateTime(ZonedDateTime.now());
+        oneChatAiApi.setUpdateTime(new Date(System.currentTimeMillis()));
         this.apiMapper.updateApi(oneChatAiApi);
     }
 

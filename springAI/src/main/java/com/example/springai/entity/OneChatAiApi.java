@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -22,15 +23,15 @@ public class OneChatAiApi {
     /**
      * 描述 可为空
      */
-    private String describe;
+    private String description;
 
     /**
      * 创建时间
      */
-    private ZonedDateTime createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private ZonedDateTime updateTime;
+    private Date updateTime;
 }

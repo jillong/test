@@ -48,7 +48,6 @@ public class ApiController {
 
     @PutMapping
     public void updateChatAiApi(@RequestBody OneChatAiApi oneChatAiApi) {
-        //如果status的状态为true，从数据库获取状态为true的，设为false，和将id设为true，一起批量更新
         OneChatAiApi chatAiApiByStatus = this.apiService.getChatAiApiByStatus(true);
         if (chatAiApiByStatus != null) {
             chatAiApiByStatus.setStatus(false);

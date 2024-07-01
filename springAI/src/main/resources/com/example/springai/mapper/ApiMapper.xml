@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springai.mapper.ApiMapper">
+
+    <select id="getApi" resultType="com.example.springai.entity.OneChatAiApi">
+        select id,
+               status,
+               description,
+               base_url    as baseUrl,
+               api_key     as apiKey,
+               create_time as createTime,
+               update_time as updateTime
+        from chat_ai.chat_api
+        where id = #{id}
+    </select>
+
+    <select id="getApis" resultType="com.example.springai.entity.OneChatAiApi">
+        select id,
+               status,
+               description,
+               base_url    as baseUrl,
+               api_key     as apiKey,
+               create_time as createTime,
+               update_time as updateTime
+        from chat_ai.chat_api
+    </select>
+
+    <insert id="createApi">
+        insert into chat_ai.chat_api(id, status, base_url, api_key, description, create_time, update_time)
+        values (#{id}, #{status}, #{baseUrl}, #{apiKey}, #{describe}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateApi">
+
+    </update>
+
+    <delete id="deleteApi">
+    </delete>
+</mapper>
