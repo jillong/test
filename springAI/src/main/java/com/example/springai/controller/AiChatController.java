@@ -17,7 +17,12 @@ import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatClient;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.parser.BeanOutputParser;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -43,12 +48,12 @@ public class AiChatController {
     /**
      * 非流式输出 call：等待大模型把回答结果全部生成后输出给用户；
      *
-     * @param message 用户输入的消息
+     * @param chatDTO 用户输入的消息
      * @return 生成的对话
      */
-    @GetMapping("/generate")
-    public String generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
-        return JacksonUtil.ToJson(chatClient.call(message));
+    @PostMapping
+    public String chat(@RequestBody ChatDTO chatDTO) {
+        return chatService.getModelResponse(chatDTO);
     }
 
     /**
@@ -64,11 +69,6 @@ public class AiChatController {
 
         Prompt prompt = new Prompt(new UserMessage(message));
         return chatClient.stream(prompt);
-    }
-
-    @PostMapping
-    public String chat(@RequestBody ChatDTO chatDTO) {
-        return chatService.getModelResponse(chatDTO);
     }
 
 

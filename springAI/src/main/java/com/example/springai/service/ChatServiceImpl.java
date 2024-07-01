@@ -6,14 +6,16 @@ import com.example.springai.utils.JacksonUtil;
 import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.*;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.FunctionMessage;
+import org.springframework.ai.chat.messages.MessageType;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.openai.OpenAiChatClient;
-import org.springframework.ai.vectorstore.PgVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,7 @@ public class ChatServiceImpl implements ChatService {
 
         String query = chatDTO.getQuery();
         if (StringUtils.isBlank(query)) {
-            return null;
+            return "请输入内容";
         }
 
         boolean augmented = chatDTO.getChatOptions().isAugmented();
