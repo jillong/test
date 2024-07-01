@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.springai.mapper.ApiMapper">
 
-    <select id="getApi" resultType="com.example.springai.entity.OneChatAiApi">
+    <select id="getApi" resultType="com.example.springai.entity.ChatAiApi">
         select id,
                status,
                description,
@@ -14,7 +14,7 @@
         where id = #{id}
     </select>
 
-    <select id="getApis" resultType="com.example.springai.entity.OneChatAiApi">
+    <select id="getApis" resultType="com.example.springai.entity.ChatAiApi">
         select id,
                status,
                description,

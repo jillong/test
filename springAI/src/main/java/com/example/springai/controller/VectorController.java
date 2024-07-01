@@ -23,7 +23,7 @@ import java.util.List;
 @Log4j2
 @RestController
 @RequestMapping("/ai/vectorStore")
-public class AiVectorController {
+public class VectorController {
 
     @Resource
     private VectorStore vectorStore;

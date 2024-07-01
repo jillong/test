@@ -1,17 +1,17 @@
 package com.example.springai.mapper;
 
-import com.example.springai.entity.OneChatAiApi;
+import com.example.springai.entity.ChatAiApi;
 
 import java.util.List;
 
 public interface ApiMapper {
-    OneChatAiApi getApi(String id);
+    ChatAiApi getApi(String id);
 
-    List<OneChatAiApi> getApis();
+    List<ChatAiApi> getApis();
 
-    void createApi(OneChatAiApi oneChatAiApi);
+    void createApi(ChatAiApi chatAiApi);
 
-    void updateApi(OneChatAiApi oneChatAiApi);
+    void updateApi(ChatAiApi chatAiApi);
 
     void deleteApi(String id);
 

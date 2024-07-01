@@ -1,7 +1,7 @@
 package com.example.springai.cache;
 
 import com.example.springai.entity.ChatOptions;
-import com.example.springai.entity.OneChatAiApi;
+import com.example.springai.entity.ChatAiApi;
 import com.example.springai.service.ApiService;
 import org.springframework.ai.openai.OpenAiChatClient;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -65,17 +65,17 @@ public class OpenAiChatCache {
 
     public OpenAiApi updateChatAiApi() {
 //TODO 更新api，client也需要更新
-        OneChatAiApi oneChatAiApi = this.apiService.getChatAiApiByStatus(true);
-        if (oneChatAiApi == null) {
+        ChatAiApi chatAiApi = this.apiService.getChatAiApiByStatus(true);
+        if (chatAiApi == null) {
             return null;
         }
 
         if (cachedAiApi == null
-                || !Objects.equals(oneChatAiApi.getApiKey(), baseUrl)
-                || !Objects.equals(oneChatAiApi.getBaseUrl(), apiKey)) {
+                || !Objects.equals(chatAiApi.getApiKey(), baseUrl)
+                || !Objects.equals(chatAiApi.getBaseUrl(), apiKey)) {
 
-            baseUrl = oneChatAiApi.getBaseUrl();
-            apiKey = oneChatAiApi.getApiKey();
+            baseUrl = chatAiApi.getBaseUrl();
+            apiKey = chatAiApi.getApiKey();
             cachedAiApi = new OpenAiApi(baseUrl, apiKey);
         }
 
@@ -86,14 +86,14 @@ public class OpenAiChatCache {
 
         if (cachedAiApi == null) {
 
-            OneChatAiApi oneChatAiApi = this.apiService.getChatAiApiByStatus(true);
-            if (oneChatAiApi == null) {
+            ChatAiApi chatAiApi = this.apiService.getChatAiApiByStatus(true);
+            if (chatAiApi == null) {
                 return null;
             }
 
-            baseUrl = oneChatAiApi.getBaseUrl();
-            apiKey = oneChatAiApi.getApiKey();
-            return new OpenAiApi(oneChatAiApi.getBaseUrl(), oneChatAiApi.getApiKey());
+            baseUrl = chatAiApi.getBaseUrl();
+            apiKey = chatAiApi.getApiKey();
+            return new OpenAiApi(chatAiApi.getBaseUrl(), chatAiApi.getApiKey());
         }
 
         return cachedAiApi;

@@ -36,7 +36,7 @@ import java.util.Set;
 @Log4j2
 @RestController
 @RequestMapping("/ai/chat")
-public class AiChatController {
+public class ChatController {
 
     @Resource
     private OpenAiChatClient chatClient;

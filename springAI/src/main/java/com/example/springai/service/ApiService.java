@@ -1,22 +1,22 @@
 package com.example.springai.service;
 
-import com.example.springai.entity.OneChatAiApi;
+import com.example.springai.entity.ChatAiApi;
 
 import java.util.List;
 
 public interface ApiService {
 
-    OneChatAiApi getChatAiApi(String id);
+    ChatAiApi getChatAiApi(String id);
 
-    OneChatAiApi getChatAiApiByStatus(Boolean status);
+    ChatAiApi getChatAiApiByStatus(Boolean status);
 
-    List<OneChatAiApi> getChatAiApis();
+    List<ChatAiApi> getChatAiApis();
 
-    void createChatAiApi(OneChatAiApi oneChatAiApi);
+    void createChatAiApi(ChatAiApi chatAiApi);
 
-    void updateChatAiApi(OneChatAiApi oneChatAiApi);
+    void updateChatAiApi(ChatAiApi chatAiApi);
 
-    void updateChatAiApis(List<OneChatAiApi> oneChatAiApis);
+    void updateChatAiApis(List<ChatAiApi> chatAiApis);
 
     void deleteChatAiApi(String id);
 }

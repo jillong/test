@@ -3,12 +3,11 @@ package com.example.springai.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Getter
 @Setter
-public class OneChatAiApi {
+public class ChatAiApi {
 
     private String id;
 

@@ -1,6 +1,6 @@
 package com.example.springai.service;
 
-import com.example.springai.entity.OneChatAiApi;
+import com.example.springai.entity.ChatAiApi;
 import com.example.springai.mapper.ApiMapper;
 import org.springframework.stereotype.Service;
 
@@ -17,36 +17,36 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public OneChatAiApi getChatAiApi(String id) {
+    public ChatAiApi getChatAiApi(String id) {
         return this.apiMapper.getApi(id);
     }
 
     @Override
-    public OneChatAiApi getChatAiApiByStatus(Boolean status) {
+    public ChatAiApi getChatAiApiByStatus(Boolean status) {
         return null;
     }
 
     @Override
-    public List<OneChatAiApi> getChatAiApis() {
+    public List<ChatAiApi> getChatAiApis() {
         return this.apiMapper.getApis();
     }
 
     @Override
-    public void createChatAiApi(OneChatAiApi oneChatAiApi) {
+    public void createChatAiApi(ChatAiApi chatAiApi) {
         long currMillis = System.currentTimeMillis();
-        oneChatAiApi.setCreateTime(new Date(currMillis));
-        oneChatAiApi.setUpdateTime(new Date(currMillis));
-        this.apiMapper.createApi(oneChatAiApi);
+        chatAiApi.setCreateTime(new Date(currMillis));
+        chatAiApi.setUpdateTime(new Date(currMillis));
+        this.apiMapper.createApi(chatAiApi);
     }
 
     @Override
-    public void updateChatAiApi(OneChatAiApi oneChatAiApi) {
-        oneChatAiApi.setUpdateTime(new Date(System.currentTimeMillis()));
-        this.apiMapper.updateApi(oneChatAiApi);
+    public void updateChatAiApi(ChatAiApi chatAiApi) {
+        chatAiApi.setUpdateTime(new Date(System.currentTimeMillis()));
+        this.apiMapper.updateApi(chatAiApi);
     }
 
     @Override
-    public void updateChatAiApis(List<OneChatAiApi> oneChatAiApis) {
+    public void updateChatAiApis(List<ChatAiApi> chatAiApis) {
 
     }
 
