@@ -23,15 +23,48 @@
                create_time as createTime,
                update_time as updateTime
         from chat_ai.chat_api
+        order by create_time
+    </select>
+
+    <select id="getChatAiApiByStatus" resultType="com.example.springai.entity.ChatAiApi">
+        select id,
+               status,
+               description,
+               base_url    as baseUrl,
+               api_key     as apiKey,
+               create_time as createTime,
+               update_time as updateTime
+        from chat_ai.chat_api
+        where status = #{status}
     </select>
 
     <insert id="createApi">
         insert into chat_ai.chat_api(id, status, base_url, api_key, description, create_time, update_time)
-        values (#{id}, #{status}, #{baseUrl}, #{apiKey}, #{describe}, #{createTime}, #{updateTime})
+        values (#{id}, #{status}, #{baseUrl}, #{apiKey}, #{description}, #{createTime}, #{updateTime})
     </insert>
 
     <update id="updateApi">
+        update chat_ai.chat_api
+        set status      = #{status},
+            base_url    = #{baseUrl},
+            api_key     = #{apiKey},
+            description = #{description},
+            create_time =#{createTime},
+            update_time =#{updateTime}
+        where id = #{id}
+    </update>
 
+    <update id="updateChatAiApis">
+        <foreach collection="chatAiApis" item="chatAiApi" separator=";">
+            update chat_ai.chat_api
+            set status = #{chatAiApi.status},
+            base_url = #{chatAiApi.baseUrl},
+            api_key = #{chatAiApi.apiKey},
+            description = #{chatAiApi.description},
+            create_time =#{chatAiApi.createTime},
+            update_time =#{chatAiApi.updateTime}
+            where id = #{chatAiApi.id}
+        </foreach>
     </update>
 
     <delete id="deleteApi">

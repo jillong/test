@@ -23,7 +23,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public ChatAiApi getChatAiApiByStatus(Boolean status) {
-        return null;
+        return this.apiMapper.getChatAiApiByStatus(status);
     }
 
     @Override
@@ -47,7 +47,11 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public void updateChatAiApis(List<ChatAiApi> chatAiApis) {
-
+        Date date = new Date(System.currentTimeMillis());
+        for (ChatAiApi chatAiApi : chatAiApis) {
+            chatAiApi.setUpdateTime(date);
+        }
+        this.apiMapper.updateChatAiApis(chatAiApis);
     }
 
     @Override
