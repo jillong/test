@@ -1,8 +1,9 @@
 package com.example.springai.controller;
 
-import com.example.springai.cache.OpenAiChatCache;
+import com.example.springai.cache.OpenAiChatClientHolder;
 import com.example.springai.entity.ChatAiApi;
 import com.example.springai.service.ApiService;
+import org.springframework.ai.openai.OpenAiChatClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,12 +12,12 @@ import java.util.List;
 @RequestMapping("/chat/api")
 public class ManageController {
 
-    private final OpenAiChatCache openAiChatCache;
+    private final OpenAiChatClientHolder openAiChatClientHolder;
 
     private final ApiService apiService;
 
-    public ManageController(OpenAiChatCache openAiChatCache, ApiService apiService) {
-        this.openAiChatCache = openAiChatCache;
+    public ManageController(OpenAiChatClientHolder openAiChatClientHolder, ApiService apiService) {
+        this.openAiChatClientHolder = openAiChatClientHolder;
         this.apiService = apiService;
     }
 
@@ -42,8 +43,15 @@ public class ManageController {
             }
 
         }
+
         this.apiService.createChatAiApi(chatAiApi);
-        this.openAiChatCache.updateChatAiApi();
+        if (this.openAiChatClientHolder.updateChatAiApi()) {
+
+            this.openAiChatClientHolder.updateChatClient(
+                    new OpenAiChatClient(
+                            this.openAiChatClientHolder.getCachedChatAiApi(),
+                            this.openAiChatClientHolder.getOpenAiChatOptions()));
+        }
     }
 
     @PutMapping
@@ -56,13 +64,25 @@ public class ManageController {
             this.apiService.updateChatAiApi(chatAiApi);
         }
 
-        this.openAiChatCache.updateChatAiApi();
+        if (this.openAiChatClientHolder.updateChatAiApi()) {
+
+            this.openAiChatClientHolder.updateChatClient(
+                    new OpenAiChatClient(
+                            this.openAiChatClientHolder.getCachedChatAiApi(),
+                            this.openAiChatClientHolder.getOpenAiChatOptions()));
+        }
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping
     public void deleteChatAiApi(@RequestParam String id) {
         this.apiService.deleteChatAiApi(id);
-        this.openAiChatCache.updateChatAiApi();
+        if (this.openAiChatClientHolder.updateChatAiApi()) {
+
+            this.openAiChatClientHolder.updateChatClient(
+                    new OpenAiChatClient(
+                            this.openAiChatClientHolder.getCachedChatAiApi(),
+                            this.openAiChatClientHolder.getOpenAiChatOptions()));
+        }
     }
 
 }

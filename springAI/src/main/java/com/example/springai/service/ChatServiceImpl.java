@@ -1,5 +1,6 @@
 package com.example.springai.service;
 
+import com.example.springai.cache.OpenAiChatClientHolder;
 import com.example.springai.entity.Message;
 import com.example.springai.entity.dto.ChatDTO;
 import com.example.springai.utils.JacksonUtil;
@@ -7,11 +8,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.FunctionMessage;
-import org.springframework.ai.chat.messages.MessageType;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.messages.*;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
@@ -30,9 +27,11 @@ public class ChatServiceImpl implements ChatService {
             给你提供一些数据参考: {info}，请回答我的问题：{query}。
             请你根据数据参考回复用户的请求。
             """;
-
     @Resource
-    private OpenAiChatClient chatClient;
+    private OpenAiChatClientHolder openAiChatClientHolder;
+
+    //@Resource
+    private OpenAiChatClient chatClient = openAiChatClientHolder.getChatClient();
 
     @Resource
     private VectorStore vectorStore;

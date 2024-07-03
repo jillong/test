@@ -68,5 +68,8 @@
     </update>
 
     <delete id="deleteApi">
+        delete
+        from chat_ai.chat_api
+        where id = #{id}
     </delete>
 </mapper>
