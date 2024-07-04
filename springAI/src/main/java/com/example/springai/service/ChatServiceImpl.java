@@ -31,14 +31,14 @@ public class ChatServiceImpl implements ChatService {
     private OpenAiChatClientHolder openAiChatClientHolder;
 
     //@Resource
-    private OpenAiChatClient chatClient = openAiChatClientHolder.getChatClient();
+    private OpenAiChatClient chatClient;
 
     @Resource
     private VectorStore vectorStore;
 
     @Override
     public String getModelResponse(ChatDTO chatDTO) {
-
+        chatClient = openAiChatClientHolder.getChatClient();
         String query = chatDTO.getQuery();
         if (StringUtils.isBlank(query)) {
             return "请输入内容";

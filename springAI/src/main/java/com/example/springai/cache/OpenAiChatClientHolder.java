@@ -27,7 +27,7 @@ public class OpenAiChatClientHolder {
 
     public OpenAiChatClient getChatClient() {
         if (this.openAiChatClient == null) {
-            this.openAiChatClient = new OpenAiChatClient(this.openAiApi, this.openAiChatOptions);
+            this.openAiChatClient = new OpenAiChatClient(getCachedChatAiApi(), getOpenAiChatOptions());
         }
         return openAiChatClient;
     }
