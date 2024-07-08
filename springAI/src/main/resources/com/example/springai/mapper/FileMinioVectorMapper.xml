@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springai.mapper.FileMinioVectorMapper">
+
+    <insert id="createFileMinioVectorMapping">
+        insert into chat_ai.file_minio_vector_mapping(id, file_name, vector_ids, url, create_time, update_time)
+        values (#{id}, #{fileName}, #{vectorIds},
+                #{url}, #{createTime}, #{updateTime})
+    </insert>
+
+    <select id="getKnowFile" resultType="com.example.springai.entity.FileMinioVectorMapping">
+        select id,
+        file_name as fileName,
+        vector_ids as vectorIds,
+        url,
+        create_time as createTime,
+        update_time as updateTime
+        from chat_ai.file_minio_vector_mapping
+        <if test="filter != null">
+            where file_name like concat('%',#{filter},'%')
+        </if>
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <select id="countFiles" resultType="java.lang.Long">
+        select count(1)
+        from chat_ai.file_minio_vector_mapping
+        <if test="filter != null">
+            where file_name like concat('%',#{filter},'%')
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,85 @@
+package com.example.springai.service;
+
+import com.example.springai.common.PagedResult;
+import com.example.springai.entity.FileMinioVectorMapping;
+import com.example.springai.mapper.FileMinioVectorMapper;
+import com.example.springai.utils.IncrementalIdGenerator;
+import com.example.springai.utils.MinioUtil;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.ai.transformer.splitter.TextSplitter;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class KnowFileServiceImpl implements KnowFileService {
+
+    private final MinioUtil minioUtil;
+
+    private final VectorStore vectorStore;
+
+    private final IncrementalIdGenerator idGenerator;
+
+    private final FileMinioVectorMapper fileMinioVectorMapper;
+
+
+    public KnowFileServiceImpl(
+            MinioUtil minioUtil, VectorStore vectorStore,
+            IncrementalIdGenerator idGenerator, FileMinioVectorMapper fileMinioVectorMapper) {
+        this.minioUtil = minioUtil;
+        this.vectorStore = vectorStore;
+        this.idGenerator = idGenerator;
+        this.fileMinioVectorMapper = fileMinioVectorMapper;
+    }
+
+    @Override
+    public void knowFileStore(MultipartFile file) throws Exception {
+
+        if (file.isEmpty()) {
+            return;
+        }
+
+        Resource resource = file.getResource();
+        TikaDocumentReader tikaDocumentReader = new TikaDocumentReader(resource);
+        List<Document> documents = tikaDocumentReader.get();
+        // 文本切分为段落
+        TextSplitter splitter = new TokenTextSplitter();
+        List<Document> applyDocument = splitter.apply(documents);
+        //存储到向量数据库
+        this.vectorStore.add(applyDocument);
+        //存储到minion
+        String url = this.minioUtil.upload(file);
+        long currMillis = System.currentTimeMillis();
+        //关联向量文本和minion数据关系到数据库
+        this.fileMinioVectorMapper.createFileMinioVectorMapping(
+                FileMinioVectorMapping
+                        .builder()
+                        .id(idGenerator.nextId())
+                        .fileName(file.getOriginalFilename())
+                        .vectorIds(applyDocument.stream().map(Document::getId).toList().toString())
+                        .url(url)
+                        .createTime(new Date(currMillis))
+                        .updateTime(new Date(currMillis))
+                        .build());
+    }
+
+    @Override
+    public PagedResult<FileMinioVectorMapping> getKnowFile(String filter, Integer page, Integer pageSize) {
+        long total = this.fileMinioVectorMapper.countFiles(filter);
+        List<FileMinioVectorMapping> knowFiles
+                = this.fileMinioVectorMapper.getKnowFile(filter, (page - 1) * pageSize, pageSize);
+
+        PagedResult<FileMinioVectorMapping> pagedKnowFiles = new PagedResult<>();
+        pagedKnowFiles.setData(knowFiles);
+        pagedKnowFiles.setPage(page);
+        pagedKnowFiles.setPageSize(pageSize);
+        pagedKnowFiles.setTotal(total);
+        return pagedKnowFiles;
+    }
+}
