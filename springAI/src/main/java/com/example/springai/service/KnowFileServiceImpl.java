@@ -66,7 +66,7 @@ public class KnowFileServiceImpl implements KnowFileService {
                         .builder()
                         .id(idGenerator.nextId())
                         .fileName(file.getOriginalFilename())
-                        .vectorIds(JacksonUtil.listToJson(applyDocument.stream().map(Document::getId).toList()))
+                        .vectorIds(JacksonUtil.ObjectToJson(applyDocument.stream().map(Document::getId).toList()))
                         .url(url)
                         .createTime(new Date(currMillis))
                         .updateTime(new Date(currMillis))
