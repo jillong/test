@@ -4,7 +4,10 @@ import com.example.springai.common.PagedResult;
 import com.example.springai.entity.FileMinioVectorMapping;
 import com.example.springai.mapper.FileMinioVectorMapper;
 import com.example.springai.utils.IncrementalIdGenerator;
+import com.example.springai.utils.JacksonUtil;
 import com.example.springai.utils.MinioUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.ai.transformer.splitter.TextSplitter;
@@ -12,6 +15,7 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -62,7 +66,7 @@ public class KnowFileServiceImpl implements KnowFileService {
                         .builder()
                         .id(idGenerator.nextId())
                         .fileName(file.getOriginalFilename())
-                        .vectorIds(applyDocument.stream().map(Document::getId).toList().toString())
+                        .vectorIds(JacksonUtil.listToJson(applyDocument.stream().map(Document::getId).toList()))
                         .url(url)
                         .createTime(new Date(currMillis))
                         .updateTime(new Date(currMillis))
@@ -73,7 +77,7 @@ public class KnowFileServiceImpl implements KnowFileService {
     public PagedResult<FileMinioVectorMapping> getKnowFile(String filter, Integer page, Integer pageSize) {
         long total = this.fileMinioVectorMapper.countFiles(filter);
         List<FileMinioVectorMapping> knowFiles
-                = this.fileMinioVectorMapper.getKnowFile(filter, (page - 1) * pageSize, pageSize);
+                = this.fileMinioVectorMapper.getPagedKnowFiles(filter, (page - 1) * pageSize, pageSize);
 
         PagedResult<FileMinioVectorMapping> pagedKnowFiles = new PagedResult<>();
         pagedKnowFiles.setData(knowFiles);
@@ -81,5 +85,25 @@ public class KnowFileServiceImpl implements KnowFileService {
         pagedKnowFiles.setPageSize(pageSize);
         pagedKnowFiles.setTotal(total);
         return pagedKnowFiles;
+    }
+
+    @Override
+    @Transactional
+    public void deleteKnowFile(String id) throws Exception {
+        FileMinioVectorMapping knowFileMapping = this.fileMinioVectorMapper.getKnowFile(id);
+        String url = knowFileMapping.getUrl();
+        String minioFileName = MinioUtil.getMinioFileName(url);
+        this.minioUtil.delete(minioFileName);
+
+        String vectorIds = knowFileMapping.getVectorIds();
+        // 解析 JSON 字符串为数组
+        List<String> vectorIdList = JacksonUtil.StringToJson(vectorIds, new TypeReference<List<String>>() {
+        });
+        if (CollectionUtils.isNotEmpty(vectorIdList)) {
+            this.vectorStore.delete(vectorIdList);
+        }
+
+        this.fileMinioVectorMapper.deleteKnowFile(id);
+
     }
 }

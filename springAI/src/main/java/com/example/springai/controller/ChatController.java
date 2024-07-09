@@ -1,7 +1,6 @@
 package com.example.springai.controller;
 
 
-import com.example.springai.cache.OpenAiChatClientHolder;
 import com.example.springai.entity.ActorsFilms;
 import com.example.springai.entity.dto.ChatDTO;
 import com.example.springai.service.ChatService;
@@ -132,7 +131,7 @@ public class ChatController {
             result.append(content);
         }
 
-        return JacksonUtil.ToJson(result.toString());
+        return JacksonUtil.ObjectToJson(result.toString());
     }
 
     /**
@@ -156,6 +155,6 @@ public class ChatController {
         Generation generation = chatClient.call(prompt).getResult();
 
         ActorsFilms actorsFilms = outputParser.parse(generation.getOutput().getContent());
-        return JacksonUtil.ToJson(actorsFilms);
+        return JacksonUtil.ObjectToJson(actorsFilms);
     }
 }

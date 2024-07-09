@@ -70,7 +70,7 @@ public class ChatServiceImpl implements ChatService {
             String content = generation.getOutput().getContent();
             result.append(content);
         }
-        return JacksonUtil.ToJson(result.toString());
+        return JacksonUtil.ObjectToJson(result.toString());
     }
 
     private List<org.springframework.ai.chat.messages.Message> getStandardMessages(List<Message> messages) {

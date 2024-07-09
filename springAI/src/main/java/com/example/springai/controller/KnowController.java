@@ -1,6 +1,7 @@
 package com.example.springai.controller;
 
 import com.example.springai.common.HttpPagedResponse;
+import com.example.springai.common.HttpResponse;
 import com.example.springai.common.PagedResult;
 import com.example.springai.entity.FileMinioVectorMapping;
 import com.example.springai.service.KnowFileService;
@@ -25,17 +26,19 @@ public class KnowController {
     }
 
     @PostMapping
-    public void addKnow(@RequestParam("files") List<MultipartFile> files) {
+    public HttpResponse<String> addKnow(@RequestParam("files") List<MultipartFile> files) {
         try {
             if (CollectionUtils.isEmpty(files)) {
-                return;
+                return HttpResultUtils.createHttpResult("50001", "上传文件为空", HttpStatus.OK);
             }
 
             for (MultipartFile file : files) {
                 this.knowFileService.knowFileStore(file);
             }
+            return HttpResultUtils.createHttpResult("上传文件成功", HttpStatus.OK);
         } catch (Exception ex) {
             log.error("上传文件异常[{}]", ex.getMessage());
+            return HttpResultUtils.createHttpResult("上传文件失败", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -47,11 +50,22 @@ public class KnowController {
         try {
             PagedResult<FileMinioVectorMapping> knowFile = this.knowFileService.getKnowFile(filter, page, pageSize);
 
-            return HttpResultUtils.createHttpPagedResult("200",knowFile, "获取文件信息成功", HttpStatus.OK);
+            return HttpResultUtils.createHttpPagedResult("200", knowFile, "获取文件信息成功", HttpStatus.OK);
         } catch (Exception ex) {
             log.error("获取文件信息失败[{}]", ex.getMessage());
             return HttpResultUtils.createHttpPagedResult("获取文件信息失败", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @DeleteMapping("/{id}")
+    public HttpResponse<String> deleteKnowFile(@PathVariable String id) {
+        try {
+            this.knowFileService.deleteKnowFile(id);
+            return HttpResultUtils.createHttpResult("删除文件成功", HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error("删除文件异常[{}]", ex.getMessage());
+            return HttpResultUtils.createHttpResult("删除文件失败", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

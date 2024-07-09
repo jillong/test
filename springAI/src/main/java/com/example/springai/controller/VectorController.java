@@ -41,7 +41,7 @@ public class VectorController {
     public String embed(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
         // 向量化
         EmbeddingResponse embeddingResponse = this.embeddingClient.embedForResponse(List.of(message));
-        return JacksonUtil.ToJson(embeddingResponse);
+        return JacksonUtil.ObjectToJson(embeddingResponse);
     }
 
     /**
@@ -56,7 +56,7 @@ public class VectorController {
         Document document = new Document(content);
         documentList.add(document);
         this.vectorStore.add(documentList);
-        return JacksonUtil.ToJson(document);
+        return JacksonUtil.ObjectToJson(document);
     }
 
     /**
@@ -68,7 +68,7 @@ public class VectorController {
     @GetMapping("/search")
     public String vectorStoreSearch(@RequestParam(value = "query") String query) {
         List<Document> documents = this.vectorStore.similaritySearch(query);
-        return JacksonUtil.ToJson(documents);
+        return JacksonUtil.ObjectToJson(documents);
     }
 
 }

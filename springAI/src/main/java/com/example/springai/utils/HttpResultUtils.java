@@ -11,6 +11,10 @@ public class HttpResultUtils {
         return createHttpResult(null, data, message, httpStatus);
     }
 
+    public static <T> HttpResponse<T> createHttpResult(String code, String message, HttpStatus httpStatus) {
+        return createHttpResult(code, null, message, httpStatus);
+    }
+
     public static <T> HttpResponse<T> createHttpResult(String message, HttpStatus httpStatus) {
         return createHttpResult(null, null, message, httpStatus);
     }

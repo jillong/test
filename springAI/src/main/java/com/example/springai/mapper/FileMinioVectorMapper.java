@@ -10,5 +10,9 @@ public interface FileMinioVectorMapper {
 
     void createFileMinioVectorMapping(FileMinioVectorMapping fileMinioVectorMapping);
 
-    List<FileMinioVectorMapping> getKnowFile(String filter, Integer offset, Integer pageSize);
+    List<FileMinioVectorMapping> getPagedKnowFiles(String filter, Integer offset, Integer pageSize);
+
+    FileMinioVectorMapping getKnowFile(String id);
+
+    void deleteKnowFile(String id);
 }

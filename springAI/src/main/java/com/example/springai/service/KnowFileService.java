@@ -8,4 +8,6 @@ public interface KnowFileService {
     void knowFileStore(MultipartFile file) throws Exception;
 
     PagedResult<FileMinioVectorMapping> getKnowFile(String filter, Integer page, Integer pageSize);
+
+    void deleteKnowFile(String id) throws Exception;
 }

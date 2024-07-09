@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -63,7 +65,7 @@ public class MinioUtil {
         }
 
         final String filename = file.getOriginalFilename();
-        String objectFileName = filename + new SimpleDateFormat(format).format(new Date());
+        String objectFileName = filename + "--" + new SimpleDateFormat(format).format(new Date());
         this.minioClient.putObject(PutObjectArgs
                 .builder()
                 .bucket(bucketName)
@@ -86,5 +88,12 @@ public class MinioUtil {
                         .object(fileName)
                         .expiry(24, TimeUnit.HOURS)
                         .build());
+    }
+
+    public static String getMinioFileName(String url) {
+        int endIndex = url.contains("?") ? url.indexOf("?") : url.length();
+        String substring = url.substring(0, endIndex);
+        return URLDecoder.decode(
+                substring.substring(substring.lastIndexOf("/") + 1), StandardCharsets.UTF_8);
     }
 }

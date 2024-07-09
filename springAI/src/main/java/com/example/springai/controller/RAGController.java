@@ -15,7 +15,6 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
-import org.springframework.ai.vectorstore.PgVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,7 +62,7 @@ public class RAGController {
 
         // 3. 段落写入向量数据库
         vectorStore.add(documents);
-        return JacksonUtil.ToJson(documents);
+        return JacksonUtil.ObjectToJson(documents);
     }
 
     /**
@@ -114,6 +113,6 @@ public class RAGController {
             String content = generation.getOutput().getContent();
             result.append(content);
         }
-        return JacksonUtil.ToJson(result.toString());
+        return JacksonUtil.ObjectToJson(result.toString());
     }
 }

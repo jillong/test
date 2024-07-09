@@ -8,7 +8,13 @@
                 #{url}, #{createTime}, #{updateTime})
     </insert>
 
-    <select id="getKnowFile" resultType="com.example.springai.entity.FileMinioVectorMapping">
+    <delete id="deleteKnowFile">
+        delete
+        from chat_ai.file_minio_vector_mapping
+        where id = #{id}
+    </delete>
+
+    <select id="getPagedKnowFiles" resultType="com.example.springai.entity.FileMinioVectorMapping">
         select id,
         file_name as fileName,
         vector_ids as vectorIds,
@@ -28,5 +34,16 @@
         <if test="filter != null">
             where file_name like concat('%',#{filter},'%')
         </if>
+    </select>
+
+    <select id="getKnowFile" resultType="com.example.springai.entity.FileMinioVectorMapping">
+        select id,
+               file_name   as fileName,
+               vector_ids  as vectorIds,
+               url,
+               create_time as createTime,
+               update_time as updateTime
+        from chat_ai.file_minio_vector_mapping
+        where id = #{id}
     </select>
 </mapper>
